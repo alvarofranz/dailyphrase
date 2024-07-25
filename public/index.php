@@ -12,12 +12,6 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
-// Function to generate a token
-function generateToken($id, $email)
-{
-    return hash('sha256', $id . $email);
-}
-
 // View
 $view = 'default_view';
 

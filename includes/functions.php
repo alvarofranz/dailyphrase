@@ -34,3 +34,9 @@ function send_email($email_address, $email_subject, $email_content, $attachments
         return false;
     }
 }
+
+// Function to generate a token
+function generateToken($id, $email)
+{
+    return hash('sha256', $id . $email);
+}
