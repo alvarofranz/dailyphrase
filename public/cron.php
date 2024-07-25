@@ -67,6 +67,8 @@ foreach ($subscribers as $subscriber) {
     $subject = "Daily Phrase: " . $phrase['phrase'];
     $encoded_subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
 
+    send_email($email, $encoded_subject, $message);
+
     // Update the subscriber's last_sent date to today
     $update_stmt = $pdo->prepare("UPDATE subscribers SET last_sent = :today WHERE id = :id");
     $update_stmt->execute([':today' => $today, ':id' => $subscriber['id']]);
