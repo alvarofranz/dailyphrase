@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && filter_va
         <p><a href="' . $verification_link . '">' . $verification_link . '</a></p><hr><p>dailyphrase.email - Thanks!</p>';
 
         // Send verification email (Use your own mail function or mail library)
-        send_email($email, "Verify your email", "Click the link to verify your email: $verification_link");
+        send_email($email, "Verify your email", $welcome_email);
 
         $view = 'sent_link';
     } else {
