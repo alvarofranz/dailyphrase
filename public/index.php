@@ -1,5 +1,6 @@
 <?php
 require '../vendor/autoload.php';
+require '../includes/functions.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && filter_va
         $verification_link = $_ENV['SITE_URL'] . '/?email=' . urlencode($email) . '&token=' . urlencode($token);
 
         // Send verification email (Use your own mail function or mail library)
-        mail($email, "Verify your email", "Click the link to verify your email: $verification_link");
+        send_email($email, "Verify your email", "Click the link to verify your email: $verification_link");
 
         $view = 'sent_link';
     } else {
@@ -92,6 +93,7 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
             align-items: center;
             height: 100vh;
         }
+
         main {
             background: #ffffff;
             padding: 3rem;
@@ -101,24 +103,29 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
             width: 100%;
             box-sizing: border-box;
         }
+
         h1 {
             font-size: 2rem;
             margin-top: 0;
             color: #333;
         }
+
         p {
             font-size: 1rem;
             color: #666;
             line-height: 1.5;
         }
+
         form {
             margin-top: 1.5rem;
         }
+
         label {
             display: block;
             margin-bottom: 0.5rem;
             font-size: 1rem;
         }
+
         input[type="email"] {
             width: 100%;
             padding: 0.5rem;
@@ -127,9 +134,11 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
             border-radius: 4px;
             box-sizing: border-box;
         }
+
         input[type="checkbox"] {
             margin-right: 0.5rem;
         }
+
         button {
             background-color: #007bff;
             color: #ffffff;
@@ -140,13 +149,16 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         button:focus {
             outline: none;
             box-shadow: 0 0 0 2px rgba(38, 143, 255, 0.5);
         }
+
         footer {
             position: fixed;
             bottom: 0;
@@ -154,6 +166,7 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
             padding: 1rem;
             font-size: 12px;
         }
+
         footer a {
             color: #777;
             text-decoration: none;
