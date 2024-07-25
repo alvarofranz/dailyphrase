@@ -32,78 +32,25 @@ if ($result && $result['last_date']) {
 
 // Arrays of random words to include in the generated phrases to help the AI be more creative
 $ingredients_colors = array(
-    'red', 'green', 'blue', 'yellow', 'orange', 'pink', 'brown', 'black', 'white',
-    'grey', 'cyan', 'magenta', 'maroon', 'navy', 'olive', 'teal', 'lime', 'gold', 'silver',
-    'beige', 'coral', 'indigo', 'ivory', 'lavender', 'mint', 'peach', 'plum', 'ruby', 'sapphire',
-    'turquoise', 'violet', 'amber', 'aqua', 'bronze', 'cherry', 'chocolate', 'cream', 'fuchsia',
-    'jade', 'khaki', 'lemon', 'mustard', 'pearl', 'rose', 'salmon', 'sand', 'scarlet', 'tangerine',
-    'ebony', 'emerald', 'garnet', 'jasmine', 'ochre', 'periwinkle', 'topaz', 'umber', 'vanilla', 'wisteria'
+    'red', 'green', 'blue', 'yellow', 'orange', 'pink', 'brown', 'black', 'white', 'grey', 'cyan', 'magenta', 'maroon', 'navy', 'olive', 'teal', 'lime', 'gold', 'silver', 'beige', 'coral', 'indigo', 'ivory', 'lavender', 'mint', 'peach', 'plum', 'ruby', 'sapphire', 'turquoise', 'violet', 'amber', 'aqua', 'bronze', 'cherry', 'cream', 'fuchsia', 'jade', 'khaki', 'lemon', 'mustard', 'pearl', 'rose', 'salmon', 'sand', 'scarlet', 'tangerine', 'ochre'
 );
 $ingredients_adjectives = array(
-    'spicy', 'sweet', 'sour', 'bitter', 'salty', 'savory', 'tangy', 'zesty', 'mild', 'hot',
-    'cold', 'crisp', 'dry', 'fresh', 'juicy', 'rich', 'ripe', 'smooth', 'tender', 'tough',
-    'creamy', 'earthy', 'fragrant', 'smoky', 'buttery', 'flaky', 'spongy', 'chewy', 'succulent',
-    'hearty', 'piquant', 'silky', 'stale', 'tart', 'toasty', 'unctuous', 'woody', 'nutty',
-    'caramelized', 'butterscotch', 'peppery', 'herbal', 'grassy', 'meaty',
-    'pungent', 'funky', 'lemony', 'honeyed', 'chocolaty', 'bubbly', 'fizzy', 'cool', 'zippy',
-    'aromatic', 'briny', 'fibrous', 'gelatinous', 'mellow', 'refreshing', 'robust', 'umami',
-    'velvety', 'zingy', 'brisk', 'buttery', 'chalky', 'floral', 'glazed', 'glutinous', 'herbaceous',
-    'malty', 'peppery', 'resinous', 'sappy', 'sharp', 'slick', 'snappy', 'soapy', 'syrupy',
-    'waxy', 'zesty', 'delicate', 'elegant', 'fiery', 'fluffy', 'hearty',
-    'intense', 'lingering', 'mature', 'peppery', 'refined', 'robust', 'rustic', 'savory',
-    'seasoned', 'sizzling', 'sophisticated', 'succulent', 'tempting', 'vibrant', 'yummy'
+    'spicy', 'sweet', 'sour', 'bitter', 'salty', 'savory', 'tangy', 'zesty', 'mild', 'hot', 'cold', 'crisp', 'dry', 'fresh', 'juicy', 'rich', 'ripe', 'smooth', 'tender', 'tough', 'creamy', 'earthy', 'fragrant', 'smoky', 'buttery', 'flaky', 'spongy', 'chewy', 'succulent', 'hearty', 'piquant', 'silky', 'stale', 'tart', 'toasty', 'unctuous', 'woody', 'nutty', 'caramelized', 'butterscotch', 'peppery', 'herbal', 'grassy', 'meaty', 'pungent', 'funky', 'lemony', 'chocolaty', 'bubbly', 'fizzy', 'cool', 'aromatic', 'briny', 'fibrous', 'gelatinous', 'mellow', 'refreshing', 'robust', 'velvety', 'brisk', 'buttery', 'chalky', 'floral', 'glazed', 'glutinous', 'herbaceous', 'malty', 'peppery', 'resinous', 'sappy', 'sharp', 'slick', 'snappy', 'soapy', 'syrupy', 'waxy', 'zesty', 'delicate', 'elegant', 'fiery', 'fluffy', 'hearty', 'intense', 'lingering', 'mature', 'peppery', 'refined', 'robust', 'rustic', 'seasoned', 'sizzling', 'sophisticated', 'succulent', 'tempting', 'vibrant', 'yummy'
 );
 $ingredients_nouns = array(
-    'apple', 'banana', 'car', 'laptop', 'book', 'table', 'chair', 'bicycle', 'camera', 'backpack',
-    'pencil', 'umbrella', 'wallet', 'clock', 'phone', 'ball', 'shoe', 'hat', 'key', 'lamp',
-    'sofa', 'cup', 'bottle', 'pizza', 'burger', 'pasta', 'sushi', 'steak', 'salad', 'cookie',
-    'ice-cream', 'bread', 'cheese', 'ham', 'butter', 'yogurt', 'honey', 'jam', 'pancake', 'waffle',
-    'city', 'village', 'town', 'beach', 'mountain', 'river', 'forest', 'desert', 'island', 'cave',
-    'bridge', 'castle', 'temple', 'museum', 'park', 'school', 'library', 'university', 'hospital', 'stadium',
-    'cinema', 'restaurant', 'cafe', 'bar', 'club', 'gym', 'hotel', 'office', 'factory', 'market',
-    'train', 'bus', 'plane', 'boat', 'ship', 'helicopter', 'motorcycle', 'scooter', 'subway', 'tram',
-    'airport', 'station', 'port', 'harbor', 'garage', 'workshop', 'farm', 'field', 'garden', 'forest',
-    'flower', 'tree', 'bush', 'grass', 'leaf', 'branch', 'root', 'seed', 'fruit', 'vegetable',
-    'tool', 'hammer', 'wrench', 'screwdriver', 'nail', 'saw', 'drill', 'level', 'measuring', 'tape',
-    'paint', 'brush', 'roller', 'can', 'bucket', 'hose', 'sprinkler', 'fountain', 'pool', 'lake',
-    'ocean', 'sea', 'pond', 'stream', 'waterfall', 'spring', 'geyser', 'volcano', 'cliff', 'canyon',
-    'boulder', 'rock', 'pebble', 'stone', 'sand', 'dirt', 'mud', 'clay', 'gravel', 'dust',
-    'cloud', 'rain', 'snow', 'hail', 'storm', 'wind', 'breeze', 'thunder', 'lightning', 'sun',
-    'moon', 'star', 'planet', 'comet', 'asteroid', 'meteor', 'galaxy', 'universe', 'space', 'vacuum'
+    'apple', 'banana', 'car', 'laptop', 'book', 'table', 'chair', 'bicycle', 'camera', 'backpack', 'pencil', 'umbrella', 'wallet', 'clock', 'phone', 'ball', 'shoe', 'hat', 'key', 'lamp', 'sofa', 'cup', 'bottle', 'pizza', 'burger', 'pasta', 'sushi', 'steak', 'salad', 'cookie', 'ice-cream', 'bread', 'cheese', 'ham', 'butter', 'yogurt', 'honey', 'jam', 'pancake', 'waffle', 'city', 'village', 'town', 'beach', 'mountain', 'river', 'forest', 'desert', 'island', 'cave', 'bridge', 'castle', 'temple', 'museum', 'park', 'school', 'library', 'university', 'hospital', 'stadium', 'cinema', 'restaurant', 'cafe', 'bar', 'club', 'gym', 'hotel', 'office', 'factory', 'market', 'train', 'bus', 'plane', 'boat', 'ship', 'helicopter', 'motorcycle', 'scooter', 'subway', 'tram', 'airport', 'station', 'port', 'harbor', 'garage', 'workshop', 'farm', 'field', 'garden', 'forest', 'flower', 'tree', 'bush', 'grass', 'leaf', 'branch', 'root', 'seed', 'fruit', 'vegetable', 'tool', 'hammer', 'wrench', 'screwdriver', 'nail', 'saw', 'drill', 'level', 'measuring', 'tape', 'paint', 'brush', 'roller', 'can', 'bucket', 'hose', 'sprinkler', 'fountain', 'pool', 'lake', 'ocean', 'sea', 'pond', 'stream', 'waterfall', 'spring', 'geyser', 'volcano', 'cliff', 'canyon', 'boulder', 'rock', 'pebble', 'stone', 'sand', 'dirt', 'mud', 'clay', 'gravel', 'dust', 'cloud', 'rain', 'snow', 'hail', 'storm', 'wind', 'breeze', 'thunder', 'lightning', 'sun', 'moon', 'star', 'planet', 'comet', 'asteroid', 'meteor', 'galaxy', 'universe', 'space', 'vacuum'
 );
 $ingredients_verbs = array(
-    'run', 'jump', 'swim', 'fly', 'dance', 'sing', 'read', 'write', 'eat', 'drink',
-    'sleep', 'wake', 'walk', 'drive', 'ride', 'cook', 'bake', 'fry', 'boil', 'grill',
-    'mix', 'blend', 'chop', 'slice', 'dice', 'stir', 'whisk', 'knead', 'measure', 'pour',
-    'taste', 'smell', 'touch', 'see', 'hear', 'feel', 'think', 'believe', 'know', 'understand',
-    'learn', 'teach', 'study', 'watch', 'listen', 'talk', 'speak', 'say', 'shout', 'whisper',
-    'laugh', 'cry', 'smile', 'frown', 'hug', 'kiss', 'shake', 'wave', 'nod', 'clap',
-    'run', 'jump', 'swim', 'fly', 'dance', 'sing', 'read', 'write', 'eat', 'drink',
-    'build', 'create', 'design', 'draw', 'paint', 'sculpt', 'carve', 'mold', 'assemble', 'construct',
-    'drive', 'ride', 'walk', 'hike', 'bike', 'climb', 'descend', 'navigate', 'explore', 'travel',
-    'play', 'game', 'compete', 'win', 'lose', 'practice', 'train', 'exercise', 'workout', 'stretch',
-    'think', 'ponder', 'consider', 'reflect', 'meditate', 'contemplate', 'analyze', 'solve', 'compute', 'calculate', 'love', 'hate', 'like', 'dislike', 'enjoy', 'prefer', 'adore', 'cherish', 'treasure', 'value'
+    'run', 'jump', 'swim', 'fly', 'sing', 'read', 'write', 'eat', 'drink', 'sleep', 'wake', 'walk', 'drive', 'ride', 'cook', 'bake', 'fry', 'boil', 'grill', 'mix', 'blend', 'chop', 'slice', 'dice', 'stir', 'whisk', 'knead', 'measure', 'pour', 'taste', 'smell', 'touch', 'see', 'hear', 'feel', 'think', 'believe', 'know', 'understand', 'learn', 'teach', 'study', 'watch', 'listen', 'talk', 'speak', 'say', 'shout', 'whisper', 'laugh', 'cry', 'smile', 'frown', 'hug', 'kiss', 'shake', 'wave', 'nod', 'clap', 'run', 'jump', 'swim', 'fly', 'sing', 'read', 'write', 'eat', 'drink', 'build', 'create', 'design', 'draw', 'paint', 'sculpt', 'carve', 'mold', 'assemble', 'construct', 'drive', 'ride', 'walk', 'hike', 'bike', 'climb', 'descend', 'navigate', 'explore', 'travel', 'play', 'game', 'compete', 'win', 'lose', 'practice', 'train', 'exercise', 'workout', 'stretch', 'think', 'ponder', 'consider', 'reflect', 'meditate', 'contemplate', 'analyze', 'solve', 'compute', 'calculate', 'love', 'hate', 'like', 'dislike', 'enjoy', 'prefer', 'adore', 'cherish', 'treasure', 'value'
 );
 $ingredients_adverbs = array(
-    'quickly', 'slowly', 'carefully', 'happily', 'sadly', 'angrily', 'eagerly', 'gracefully', 'lazily', 'quietly',
-    'loudly', 'smoothly', 'awkwardly', 'calmly', 'cheerfully', 'briskly', 'gently', 'intensely', 'softly', 'swiftly',
-    'tenderly', 'warmly', 'wildly', 'boldly', 'courageously', 'frankly', 'genuinely', 'gratefully', 'honestly', 'jovially',
-    'kindly', 'lightly', 'meekly', 'nervously', 'openly', 'politely', 'proudly', 'rudely', 'seriously', 'sternly',
-    'vividly', 'vaguely', 'vibrantly', 'zealously', 'carelessly', 'deliberately', 'elegantly', 'foolishly', 'innocently', 'recklessly'
+    'quickly', 'slowly', 'carefully', 'happily', 'sadly', 'angrily', 'eagerly', 'gracefully', 'lazily', 'quietly', 'loudly', 'smoothly', 'awkwardly', 'calmly', 'cheerfully', 'briskly', 'gently', 'intensely', 'softly', 'swiftly', 'tenderly', 'warmly', 'wildly', 'boldly', 'courageously', 'frankly', 'genuinely', 'gratefully', 'honestly', 'jovially', 'kindly', 'lightly', 'meekly', 'nervously', 'openly', 'politely', 'proudly', 'rudely', 'seriously', 'sternly', 'vividly', 'vaguely', 'vibrantly', 'zealously', 'carelessly', 'deliberately', 'elegantly', 'foolishly', 'innocently', 'recklessly'
 );
 $ingredients_emotions = array(
-    'happy', 'sad', 'angry', 'excited', 'nervous', 'anxious', 'relaxed', 'content', 'joyful', 'frustrated',
-    'elated', 'bored', 'curious', 'confused', 'scared', 'hopeful', 'lonely', 'proud', 'guilty', 'ashamed',
-    'determined', 'surprised', 'grateful', 'jealous', 'disappointed', 'embarrassed', 'enthusiastic', 'fearful', 'furious', 'glad',
-    'miserable', 'optimistic', 'pessimistic', 'relieved', 'resentful', 'shocked', 'stressed', 'sympathetic', 'tired', 'trustful',
-    'unhappy', 'upset', 'worried', 'zestful', 'passionate', 'melancholic', 'nostalgic', 'satisfied', 'serene', 'pensive'
+    'happy', 'sad', 'angry', 'excited', 'nervous', 'anxious', 'relaxed', 'content', 'joyful', 'frustrated', 'bored', 'curious', 'confused', 'scared', 'hopeful', 'lonely', 'proud', 'guilty', 'ashamed', 'determined', 'surprised', 'grateful', 'jealous', 'disappointed', 'embarrassed', 'enthusiastic', 'fearful', 'furious', 'glad', 'miserable', 'optimistic', 'pessimistic', 'relieved', 'resentful', 'shocked', 'stressed', 'sympathetic', 'tired', 'trustful', 'unhappy', 'upset', 'worried', 'zestful', 'passionate', 'melancholic', 'nostalgic', 'satisfied', 'serene', 'pensive'
 );
 $ingredients_professions = array(
-    'doctor', 'engineer', 'teacher', 'artist', 'writer', 'chef', 'nurse', 'lawyer', 'scientist', 'pilot',
-    'mechanic', 'plumber', 'electrician', 'architect', 'dentist', 'pharmacist', 'firefighter', 'police', 'soldier', 'accountant',
-    'actor', 'musician', 'designer', 'journalist', 'photographer', 'veterinarian', 'barber', 'tailor', 'carpenter', 'coach',
-    'manager', 'salesperson', 'consultant', 'developer', 'analyst', 'researcher', 'professor', 'receptionist', 'librarian', 'farmer',
-    'gardener', 'translator', 'interpreter', 'guide', 'broker', 'dispatcher', 'guard', 'technician', 'therapist', 'counselor'
+    'doctor', 'engineer', 'teacher', 'artist', 'writer', 'chef', 'nurse', 'lawyer', 'scientist', 'pilot', 'mechanic', 'plumber', 'electrician', 'architect', 'dentist', 'pharmacist', 'firefighter', 'police', 'soldier', 'accountant', 'actor', 'musician', 'designer', 'journalist', 'photographer', 'veterinarian', 'barber', 'tailor', 'carpenter', 'coach', 'manager', 'salesperson', 'consultant', 'developer', 'analyst', 'researcher', 'professor', 'receptionist', 'librarian', 'farmer', 'gardener', 'translator', 'interpreter', 'guide', 'broker', 'dispatcher', 'guard', 'technician', 'therapist', 'counselor'
 );
 
 // Get the random types to include
@@ -209,12 +156,14 @@ try {
 }
 
 // Helper function to get a random item from an array
-function get_random_item($array) {
+function get_random_item($array)
+{
     return $array[array_rand($array)];
 }
 
 // Helper function to randomly decide which types to include
-function get_random_types() {
+function get_random_types()
+{
     $types = ['color', 'adjective', 'noun', 'verb', 'adverb', 'emotion', 'profession'];
     shuffle($types);
     $num_to_include = rand(4, 7);
