@@ -21,13 +21,18 @@ $stmt->execute([':today' => $today]);
 $phrase = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$phrase) {
-    die("No phrase found for today.");
+    exit;
 }
 
 // Fetch up to 20 verified subscribers whose last_sent is less than today
 $stmt = $pdo->prepare("SELECT * FROM subscribers WHERE verified = 1 AND last_sent < :today LIMIT 20");
 $stmt->execute([':today' => $today]);
 $subscribers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// If no subscribers are found, stop the script
+if (!$subscribers) {
+    exit;
+}
 
 foreach ($subscribers as $subscriber) {
     $email = $subscriber['email'];
@@ -54,12 +59,9 @@ foreach ($subscribers as $subscriber) {
     }
 
     // Send the email (Use your own mail function or mail library)
-    mail($email, "Daily Phrase: " . $phrase['phrase'], $message);
+    send_email($email, "Daily Phrase: " . $phrase['phrase'], $message);
 
     // Update the subscriber's last_sent date to today
     $update_stmt = $pdo->prepare("UPDATE subscribers SET last_sent = :today WHERE id = :id");
     $update_stmt->execute([':today' => $today, ':id' => $subscriber['id']]);
 }
-
-echo "Emails sent successfully.";
-?>
