@@ -185,6 +185,11 @@ if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
             margin-right: 0.5rem;
         }
 
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
         button {
             background-color: #007bff;
             color: #ffffff;
