@@ -1,6 +1,6 @@
 <?php
-
 require '../vendor/autoload.php';
+require '../includes/functions.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
@@ -31,30 +31,30 @@ $subscribers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($subscribers as $subscriber) {
     $email = $subscriber['email'];
-    $message = "Today's phrase: " . $phrase['phrase'] . "\n\n";
+    $message = "<h1 style='color: #3498db;'>Today's Phrase</h1>" . "<p style='font-size: 16px;'>" . htmlspecialchars($phrase['phrase']) . "</p><hr>";
 
     // Add translations based on subscriber's preferences
     if ($subscriber['spanish']) {
-        $message .= "Spanish: " . $phrase['spanish'] . "\n";
+        $message .= "<p><strong>Spanish:</strong> " . htmlspecialchars($phrase['spanish']) . "</p>";
     }
     if ($subscriber['german']) {
-        $message .= "German: " . $phrase['german'] . "\n";
+        $message .= "<p><strong>German:</strong> " . htmlspecialchars($phrase['german']) . "</p>";
     }
     if ($subscriber['italian']) {
-        $message .= "Italian: " . $phrase['italian'] . "\n";
+        $message .= "<p><strong>Italian:</strong> " . htmlspecialchars($phrase['italian']) . "</p>";
     }
     if ($subscriber['french']) {
-        $message .= "French: " . $phrase['french'] . "\n";
+        $message .= "<p><strong>French:</strong> " . htmlspecialchars($phrase['french']) . "</p>";
     }
     if ($subscriber['portuguese']) {
-        $message .= "Portuguese: " . $phrase['portuguese'] . "\n";
+        $message .= "<p><strong>Portuguese:</strong> " . htmlspecialchars($phrase['portuguese']) . "</p>";
     }
     if ($subscriber['norwegian']) {
-        $message .= "Norwegian: " . $phrase['norwegian'] . "\n";
+        $message .= "<p><strong>Norwegian:</strong> " . htmlspecialchars($phrase['norwegian']) . "</p>";
     }
 
     // Send the email (Use your own mail function or mail library)
-    mail($email, "Daily Phrase", $message);
+    mail($email, "Daily Phrase: " . $phrase['phrase'], $message);
 
     // Update the subscriber's last_sent date to today
     $update_stmt = $pdo->prepare("UPDATE subscribers SET last_sent = :today WHERE id = :id");
