@@ -16,7 +16,7 @@ try {
 $view = 'default_view';
 
 // Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && isset($_POST['g-recaptcha-response']) && is_recaptcha_token_verification_successful($_POST['g-recaptcha-response'])) {
     $email = $_POST['email'];
     $languages = ['spanish', 'german', 'italian', 'french', 'portuguese', 'norwegian'];
     $last_sent = date('Y-m-d', strtotime('-1 day'));
@@ -213,6 +213,7 @@ if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
             text-decoration: none;
         }
     </style>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
 <body>
 <main>
@@ -257,6 +258,8 @@ if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
                 <label><input type="checkbox" name="french"> French</label>
                 <label><input type="checkbox" name="portuguese"> Portuguese</label>
                 <label><input type="checkbox" name="norwegian"> Norwegian</label>
+                <br>
+                <div class="g-recaptcha" data-sitekey="<?php echo $_ENV['RECAPTACHA_SITE_KEY']; ?>"></div>
                 <br>
                 <button type="submit">Subscribe</button>
             </form>
