@@ -61,6 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && filter_va
         $token = generateToken($subscriber_id, $email);
         $verification_link = $_ENV['SITE_URL'] . '/?email=' . urlencode($email) . '&token=' . urlencode($token) . '&action=verify';
 
+        $welcome_email = '<h1>Welcome to Daily Phrase!</h1>
+        <p>You will receive a daily phrase in the languages you selected.</p>
+        <p>Please click the link below to verify your email address and start receiving your daily phrases:</p>
+        <p><a href="' . $verification_link . '">' . $verification_link . '</a></p><hr><p>dailyphrase.email - Thanks!</p>';
+
         // Send verification email (Use your own mail function or mail library)
         send_email($email, "Verify your email", "Click the link to verify your email: $verification_link");
 
