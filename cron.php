@@ -1,6 +1,6 @@
 <?php
-require './vendor/autoload.php';
-require './includes/functions.php';
+require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/includes/functions.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
