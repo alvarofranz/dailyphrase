@@ -114,6 +114,15 @@ if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Phrase via E-mail</title>
+    <meta property="og:title" content="Daily Phrase Service">
+    <meta property="og:description"
+          content="Subscribe to receive daily phrases in various languages to boost your language skills. Simple, free, and effective learning experience.">
+    <meta property="og:image" content="https://dailyphrase.email/languages-daily-phrase.jpg">
+    <meta property="og:url" content="https://dailyphrase.email">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Daily Phrase">
+    <link rel="icon" href="https://dailyphrase.email/icon.png" type="image/png">
+    <meta name="theme-color" content="#ffffff">
     <style>
         body {
             margin: 0;
@@ -216,7 +225,12 @@ if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
             break;
         case 'verification_completed':
             echo '<h1>Email verified</h1>
-        <p>Your email has been added to the list and you will receive your daily dose of language practice.</p>';
+        <p>Your email has been added to the list and you will receive your daily dose of language practice.</p>
+        <p>
+        <a href="https://wa.me/?text=https%3A%2F%2Fdailyphrase.email" target="_blank" rel="noopener noreferrer">
+            <img src="/whatsapp-share-button-icon.webp" alt="Share on WhatsApp">
+        </a>
+        </p>';
             break;
         case 'unsubscribed':
             echo '<h1>Unsubscribed</h1>
