@@ -259,7 +259,7 @@ if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
                 <label><input type="checkbox" name="portuguese"> Portuguese</label>
                 <label><input type="checkbox" name="norwegian"> Norwegian</label>
                 <br>
-                <div class="g-recaptcha" data-sitekey="<?php echo $_ENV['RECAPTACHA_SITE_KEY']; ?>"></div>
+                <div class="g-recaptcha" data-sitekey="<?php echo $_ENV['RECAPTCHA_SITE_KEY']; ?>"></div>
                 <br>
                 <button type="submit">Subscribe</button>
             </form>
