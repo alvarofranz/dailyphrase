@@ -1,0 +1,65 @@
+<?php
+
+require '../vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+
+// Establish a database connection
+try {
+    $pdo = new PDO("mysql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'] . ";charset=utf8mb4", $_ENV['DB_USER'], $_ENV['DB_PASS']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
+// Fetch today's date
+$today = date('Y-m-d');
+
+// Fetch today's phrase
+$stmt = $pdo->prepare("SELECT * FROM phrases WHERE date = :today LIMIT 1");
+$stmt->execute([':today' => $today]);
+$phrase = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$phrase) {
+    die("No phrase found for today.");
+}
+
+// Fetch up to 20 verified subscribers whose last_sent is less than today
+$stmt = $pdo->prepare("SELECT * FROM subscribers WHERE verified = 1 AND last_sent < :today LIMIT 20");
+$stmt->execute([':today' => $today]);
+$subscribers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($subscribers as $subscriber) {
+    $email = $subscriber['email'];
+    $message = "Today's phrase: " . $phrase['phrase'] . "\n\n";
+
+    // Add translations based on subscriber's preferences
+    if ($subscriber['spanish']) {
+        $message .= "Spanish: " . $phrase['spanish'] . "\n";
+    }
+    if ($subscriber['german']) {
+        $message .= "German: " . $phrase['german'] . "\n";
+    }
+    if ($subscriber['italian']) {
+        $message .= "Italian: " . $phrase['italian'] . "\n";
+    }
+    if ($subscriber['french']) {
+        $message .= "French: " . $phrase['french'] . "\n";
+    }
+    if ($subscriber['portuguese']) {
+        $message .= "Portuguese: " . $phrase['portuguese'] . "\n";
+    }
+    if ($subscriber['norwegian']) {
+        $message .= "Norwegian: " . $phrase['norwegian'] . "\n";
+    }
+
+    // Send the email (Use your own mail function or mail library)
+    mail($email, "Daily Phrase", $message);
+
+    // Update the subscriber's last_sent date to today
+    $update_stmt = $pdo->prepare("UPDATE subscribers SET last_sent = :today WHERE id = :id");
+    $update_stmt->execute([':today' => $today, ':id' => $subscriber['id']]);
+}
+
+echo "Emails sent successfully.";
+?>
