@@ -127,7 +127,6 @@ if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
         body {
             margin: 0;
             padding: 0;
-            overflow: hidden;
             font-family: Arial, sans-serif;
             background: linear-gradient(to right, #f8f9fa, #e9ecef);
             display: flex;
