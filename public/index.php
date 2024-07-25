@@ -118,7 +118,7 @@ if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Phrase via E-mail</title>
+    <title>Daily Phrase via E-mail | Practice your languages!</title>
     <meta property="og:title" content="Daily Phrase Service">
     <meta property="og:description"
           content="Subscribe to receive daily phrases in various languages to boost your language skills. Simple, free, and effective learning experience.">
