@@ -60,6 +60,8 @@ try {
     // decode response
     $d = json_decode($chat);
 
+    error_log(print_r($d, true));
+
     try {
         // Execute the SQL query
         $stmt = $pdo->prepare($d->choices[0]->message->content);
