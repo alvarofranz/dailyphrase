@@ -1,7 +1,7 @@
 <?php
-require '../vendor/autoload.php';
-require '../includes/functions.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+require './vendor/autoload.php';
+require './includes/functions.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 // Establish a database connection
