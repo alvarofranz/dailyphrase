@@ -20,5 +20,5 @@ function send_email($email_address, $email_subject, $email_content): bool
 // Function to generate a token
 function generateToken($id, $email): string
 {
-    return hash('sha256', $id . $email);
+    return hash('sha256', $_ENV['SUGAR'] . $id . $email);
 }
