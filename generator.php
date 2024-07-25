@@ -4,7 +4,7 @@ require __DIR__ . '/includes/functions.php';
 
 use Orhanerday\OpenAi\OpenAi;
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $open_ai = new OpenAi($_ENV['OPENAI_API_KEY']);
