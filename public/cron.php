@@ -1,9 +1,4 @@
 <?php
-
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-
 require '../vendor/autoload.php';
 require '../includes/functions.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
@@ -62,6 +57,12 @@ foreach ($subscribers as $subscriber) {
     if ($subscriber['norwegian']) {
         $message .= "<p><strong>Norwegian:</strong> " . htmlspecialchars($phrase['norwegian']) . "</p>";
     }
+
+    // Generate the unsubscribe link
+    $unsubscribe_token = generateToken($subscriber['id'], $email);
+    $unsubscribe_link = $_ENV['SITE_URL'] . '/?email=' . urlencode($email) . '&token=' . urlencode($unsubscribe_token) . '&action=unsubscribe';
+
+    $message .= "<hr><p>dailyphrase.email - " . $today . " - <a href='$unsubscribe_link'>Unsubscribe</a></p>";
 
     // Send the email (Use your own mail function or mail library)
     $subject = "Daily Phrase: " . $phrase['phrase'];

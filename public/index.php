@@ -27,8 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && filter_va
     $languages = ['spanish', 'german', 'italian', 'french', 'portuguese', 'norwegian'];
     $last_sent = date('Y-m-d', strtotime('-1 day'));
 
-    $stmt = $pdo->prepare("INSERT INTO subscribers (email, last_sent, spanish, german, italian, french, portuguese, norwegian) VALUES (:email, :last_sent, :spanish, :german, :italian, :french, :portuguese, :norwegian)");
+    // Prepare your statement
+    $insertOrUpdateStmt = $pdo->prepare("
+    INSERT INTO subscribers (email, last_sent, spanish, german, italian, french, portuguese, norwegian)
+    VALUES (:email, :last_sent, :spanish, :german, :italian, :french, :portuguese, :norwegian)
+    ON DUPLICATE KEY UPDATE
+        last_sent = VALUES(last_sent),
+        spanish = VALUES(spanish),
+        german = VALUES(german),
+        italian = VALUES(italian),
+        french = VALUES(french),
+        portuguese = VALUES(portuguese),
+        norwegian = VALUES(norwegian)
+    ");
 
+    // Define your parameters
     $params = [
         ':email' => $email,
         ':last_sent' => $last_sent,
@@ -40,10 +53,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && filter_va
         ':norwegian' => isset($_POST['norwegian']) ? 1 : 0,
     ];
 
-    if ($stmt->execute($params)) {
-        $subscriber_id = $pdo->lastInsertId();
+    // Execute the statement
+    if ($insertOrUpdateStmt->execute($params)) {
+        // Check if the record was inserted or updated
+        // Use a SELECT query to retrieve the ID based on the unique key (email)
+        $selectStmt = $pdo->prepare("SELECT id FROM subscribers WHERE email = :email");
+        $selectStmt->execute([':email' => $email]);
+
+        // Fetch the ID
+        $subscriber = $selectStmt->fetch(PDO::FETCH_ASSOC);
+        $subscriber_id = $subscriber ? $subscriber['id'] : null;
+
         $token = generateToken($subscriber_id, $email);
-        $verification_link = $_ENV['SITE_URL'] . '/?email=' . urlencode($email) . '&token=' . urlencode($token);
+        $verification_link = $_ENV['SITE_URL'] . '/?email=' . urlencode($email) . '&token=' . urlencode($token) . '&action=verify';
 
         // Send verification email (Use your own mail function or mail library)
         send_email($email, "Verify your email", "Click the link to verify your email: $verification_link");
@@ -55,7 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && filter_va
 }
 
 // Handle email verification
-if (isset($_GET['email']) && isset($_GET['token'])) {
+if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
+    $view = 'verification_completed';
+
     $email = urldecode($_GET['email']);
     $token = urldecode($_GET['token']);
 
@@ -63,15 +87,30 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
     $stmt->execute([':email' => $email]);
     $subscriber = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($subscriber && !$subscriber['verified']) {
+    if ($subscriber) {
         $expected_token = generateToken($subscriber['id'], $email);
-        if ($token === $expected_token) {
-            $update_stmt = $pdo->prepare("UPDATE subscribers SET verified = 1 WHERE id = :id");
-            $update_stmt->execute([':id' => $subscriber['id']]);
+
+        if ($_GET['action'] == 'verify') {
+            if (!$subscriber['verified']) {
+                if ($token === $expected_token) {
+                    $update_stmt = $pdo->prepare("UPDATE subscribers SET verified = 1 WHERE id = :id");
+                    $update_stmt->execute([':id' => $subscriber['id']]);
+                }
+            }
         }
+
+        if ($_GET['action'] == 'unsubscribe') {
+            if ($subscriber['verified']) {
+                if ($token === $expected_token) {
+                    $update_stmt = $pdo->prepare("UPDATE subscribers SET verified = 0 WHERE id = :id");
+                    $update_stmt->execute([':id' => $subscriber['id']]);
+                }
+            }
+            $view = 'unsubscribed';
+        }
+
     }
 
-    $view = 'verification_completed';
 }
 ?>
 
@@ -184,6 +223,14 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
         case 'verification_completed':
             echo '<h1>Email verified</h1>
         <p>Your email has been added to the list and you will receive your daily dose of language practice.</p>';
+            break;
+        case 'unsubscribed':
+            echo '<h1>Unsubscribed</h1>
+        <p>Your email has been removed from the list. You will no longer receive daily phrases.</p>';
+            break;
+        case 'error':
+            echo '<h1>Error</h1>
+        <p>There was an error processing your request. Please <a href="/">try again</a>.</p>';
             break;
         default:
             ?>
