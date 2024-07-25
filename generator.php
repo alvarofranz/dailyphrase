@@ -1,5 +1,7 @@
 <?php
-require '../vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/includes/functions.php';
+
 use Orhanerday\OpenAi\OpenAi;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
@@ -46,24 +48,26 @@ try {
             ],
             [
                 "role" => "user",
-                "content" => "Good, you only returned the SQL, nothing else. That is what I wanted. You also used the correct date that I provided and escaped the values properly. But the phrase is too phylosophical. I need something creative talking about random stuff, make sure to be random, because every day it has to be unique, and pay attention to the translations, they have to be perfect. And escaping values for SQL is very important too to avoid SQL injection."
+                "content" => "Good, you only returned the SQL, nothing else. That is what I wanted. You also used the correct date that I provided and escaped the values properly. But the phrase is too philosophical. I need something creative talking about random stuff, make sure to be random, because every day it has to be unique, and pay attention to the translations, they have to be perfect, I don't like mediocre translations. And escaping values for SQL is very important too to avoid SQL injection."
             ],
         ],
-        'temperature' => 0.95,
-        'max_tokens' => 4000,
-        'frequency_penalty' => 0.1,
-        'presence_penalty' => 0.1,
+        'temperature' => 1,
+        'max_tokens' => 10000,
+        'frequency_penalty' => 0,
+        'presence_penalty' => 0,
     ]);
 
     // decode response
     $d = json_decode($chat);
-    echo '<pre>' . $d->choices[0]->message->content . '</pre>';
+
+    // Send email to the admin with the generated phrase
+    send_email($_ENV['ADMIN_EMAIL'], 'A daily phrase was generated for ' . $phrase_date, '<pre>' . $d->choices[0]->message->content . '</pre>');
 
     // Execute the SQL query
     $stmt = $pdo->prepare($d->choices[0]->message->content);
     $stmt->execute();
 } catch (Exception $e) {
-    echo 'Error: ',  $e->getMessage();
+    echo 'Error: ', $e->getMessage();
 }
 
 
