@@ -60,12 +60,25 @@ try {
     // decode response
     $d = json_decode($chat);
 
-    // Send email to the admin with the generated phrase
-    send_email($_ENV['ADMIN_EMAIL'], 'A daily phrase was generated for ' . $phrase_date, '<pre>' . $d->choices[0]->message->content . '</pre>');
+    try {
+        // Execute the SQL query
+        $stmt = $pdo->prepare($d->choices[0]->message->content);
+        $stmt->execute();
 
-    // Execute the SQL query
-    $stmt = $pdo->prepare($d->choices[0]->message->content);
-    $stmt->execute();
+        // Get the last inserted ID
+        $generatedPhraseId = $pdo->lastInsertId();
+
+        // Prepare the email content
+        $emailContent = "<pre>" . $d->choices[0]->message->content . "</pre>";
+        $emailContent .= "<p>Generated Phrase ID: " . $generatedPhraseId . "</p>";
+
+        // Send email to the admin with the generated phrase and ID
+        send_email($_ENV['ADMIN_EMAIL'], 'A daily phrase was generated for ' . $phrase_date, $emailContent);
+    } catch (PDOException $e) {
+        // Send email to the admin with the MySQL error
+        send_email($_ENV['ADMIN_EMAIL'], 'Error generating daily phrase for ' . $phrase_date, '<pre>' . $e->getMessage() . '</pre>');
+    }
+
 } catch (Exception $e) {
     echo 'Error: ', $e->getMessage();
 }
