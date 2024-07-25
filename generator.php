@@ -52,15 +52,13 @@ try {
             ],
         ],
         'temperature' => 1,
-        'max_tokens' => 10000,
+        'max_tokens' => 4096,
         'frequency_penalty' => 0,
         'presence_penalty' => 0,
     ]);
 
-    // decode response
+    // Decode response
     $d = json_decode($chat);
-
-    error_log(print_r($d, true));
 
     try {
         // Execute the SQL query
