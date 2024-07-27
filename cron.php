@@ -60,11 +60,13 @@ foreach ($subscribers as $subscriber) {
         $message .= "<p><strong>Norwegian:</strong> " . htmlspecialchars($phrase['norwegian']) . "</p>";
     }
 
+    $message .= "<p><i>Don't just ignore this. Take your time to learn the new vocabulary, a small step a day makes wonders!</i></p>";
+
     // Add image if exists
     $image_path = __DIR__ . '/public/images/' . $phrase['date'] . '.jpg';
     if (file_exists($image_path)) {
         $message .= "
-        <p><strong>Feel inspired:</strong></p>
+        <p><strong>Feel inspired by today's topic:</strong></p>
         <img src='" . $_ENV['SITE_URL'] . '/images/' . $phrase['date'] . '.jpg' . "' alt='Image' style='max-width:100%;height:auto;border-radius:8px;'>";
     }
 
