@@ -36,7 +36,9 @@ if (!$subscribers) {
 
 foreach ($subscribers as $subscriber) {
     $email = $subscriber['email'];
-    $message = "<h1 style='color: #3498db;'>Today's Phrase</h1>" . "<p style='font-size: 16px;'>" . htmlspecialchars($phrase['phrase']) . "</p><hr>";
+    $message = "<h1 style='color: #004574;'>Today's Phrase</h1>
+
+    <p style='font-size:16px;padding:15px;background-color:#004574;color:#FFF;border-radius:8px;'>" . htmlspecialchars($phrase['phrase']) . "</p><hr>";
 
     // Add translations based on subscriber's preferences
     if ($subscriber['spanish']) {
@@ -58,11 +60,21 @@ foreach ($subscribers as $subscriber) {
         $message .= "<p><strong>Norwegian:</strong> " . htmlspecialchars($phrase['norwegian']) . "</p>";
     }
 
+    // Add image if exists
+    $image_path = __DIR__ . '/images/' . $phrase['date'] . '.jpg';
+    if (file_exists($image_path)) {
+        $message .= "
+        <p><strong>Feel inspired:</strong></p>
+        <img src='" . $_ENV['SITE_URL'] . '/images/' . $phrase['date'] . '.jpg' . "' alt='Image' style='max-width:100%;height:auto;border-radius:8px;'>";
+    }
+
     // Generate the unsubscribe link
     $unsubscribe_token = generateToken($subscriber['id'], $email);
     $unsubscribe_link = $_ENV['SITE_URL'] . '/?email=' . urlencode($email) . '&token=' . urlencode($unsubscribe_token) . '&action=unsubscribe';
 
-    $message .= "<hr><p>dailyphrase.email - " . $today . " - <a href='$unsubscribe_link'>Unsubscribe</a></p>";
+    $message .= "<hr>
+    <p>dailyphrase.email | <i>" . $today . "</i></p>
+    <p style='margin-top:30px;font-size:11px;color:#555;'>30 N Gould St Ste N, Sheridan, WY 82801 - <a href='" . $unsubscribe_link . "' title='Unsubscribe from Daily Phrase'>Unsubscribe</a></p>";
 
     // Send the email (Use your own mail function or mail library)
     $subject = "Daily Phrase: " . $phrase['phrase'];
