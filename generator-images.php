@@ -39,7 +39,7 @@ if ($phrase) {
 
     if (isset($response['data'][0]['url'])) {
         $image = file_get_contents($response['data'][0]['url']);
-        file_put_contents('images/' . $phrase['date'] . '.jpg', $image);
+        file_put_contents(__DIR__ . '/public/images/' . $phrase['date'] . '.jpg', $image);
         // Update the phrase in the database
         $statement = $pdo->prepare("UPDATE phrases SET imaged = 1 WHERE id = :id");
         $statement->execute(['id' => $phrase['id']]);

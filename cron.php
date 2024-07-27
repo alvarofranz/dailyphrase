@@ -61,7 +61,7 @@ foreach ($subscribers as $subscriber) {
     }
 
     // Add image if exists
-    $image_path = __DIR__ . '/images/' . $phrase['date'] . '.jpg';
+    $image_path = __DIR__ . '/public/images/' . $phrase['date'] . '.jpg';
     if (file_exists($image_path)) {
         $message .= "
         <p><strong>Feel inspired:</strong></p>
