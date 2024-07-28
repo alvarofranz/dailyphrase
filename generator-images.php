@@ -28,7 +28,7 @@ if ($phrase) {
         "model" => "dall-e-3",
         "style" => "vivid",
         "quality" => "hd",
-        "prompt" => $phrase['phrase'],
+        "prompt" => 'Creative, funny, fantastic, without text, representing this topic:' . $phrase['phrase'],
         "n" => 1,
         "size" => "1024x1024",
         "response_format" => "url",
