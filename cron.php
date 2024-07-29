@@ -66,7 +66,7 @@ foreach ($subscribers as $subscriber) {
     $image_path = __DIR__ . '/public/images/' . $phrase['date'] . '.jpg';
     if (file_exists($image_path)) {
         $message .= "
-        <img src='" . $_ENV['SITE_URL'] . '/images/' . $phrase['date'] . '.jpg' . "' alt='Image' style='max-width:500px;height:auto;border-radius:8px;'>";
+        <img src='" . $_ENV['SITE_URL'] . '/images/' . $phrase['date'] . '.jpg' . "' alt='Image' style='width:500px;max-width:100%;height:auto;border-radius:8px;'>";
     }
 
     // Generate the unsubscribe link
