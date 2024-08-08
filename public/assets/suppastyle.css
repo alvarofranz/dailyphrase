@@ -75,7 +75,9 @@ form {
 }
 
 .languages-picker {
-    column-count: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
 }
 
 label {
