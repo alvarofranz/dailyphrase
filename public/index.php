@@ -181,6 +181,7 @@ if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-XP2B88NNS7');
+        gtag('config', 'AW-16666605491');
     </script>
 </head>
 <body>
