@@ -146,7 +146,7 @@ if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
             }
             $page_title = '- ' . $view_phrase['phrase'];
             $page_og_title = $view_phrase['phrase'];
-            $page_image = '/images/' . $view_phrase['date'] . '.jpg';
+            $page_og_image = '/images/' . $view_phrase['date'] . '.jpg';
             break;
         case 'sent_link':
             $page_title = '- Verification link sent';
