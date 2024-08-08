@@ -15,8 +15,27 @@ try {
 // View
 $view = 'default_view';
 
+if (isset($_GET['phrase'])) {
+    // Check if it is a valid Y-m-d date
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $_GET['phrase'])) {
+        header('Location: /');
+        exit;
+    }
+    // Check if date is less than or equal to today
+    if ($_GET['phrase'] > date('Y-m-d')) {
+        header('Location: /');
+        exit;
+    }
+    $stmt = $pdo->prepare("SELECT * FROM phrases WHERE date = :phrase");
+    $stmt->execute([':phrase' => $_GET['phrase']]);
+    $view_phrase = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($view_phrase) {
+        $view = 'view_phrase';
+    }
+}
+
 // Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && isset($_POST['g-recaptcha-response']) && is_recaptcha_token_verification_successful($_POST['g-recaptcha-response'])) {
+if ($view === 'default_view' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && isset($_POST['g-recaptcha-response']) && is_recaptcha_token_verification_successful($_POST['g-recaptcha-response'])) {
     $email = $_POST['email'];
     $languages = ['spanish', 'german', 'italian', 'french', 'portuguese', 'norwegian'];
     $last_sent = date('Y-m-d', strtotime('-1 day'));
@@ -112,173 +131,132 @@ if (isset($_GET['email']) && isset($_GET['token']) && isset($_GET['action'])) {
 
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Phrase via E-mail | Practice your languages!</title>
-    <meta property="og:title" content="Daily Phrase Service">
+    <?php
+    $page_og_image = '/assets/languages-daily-phrase.jpg';
+    $page_og_title = 'Daily Phrase Service';
+    switch ($view) {
+        case 'view_phrase':
+            if (!isset($view_phrase)) {
+                exit;
+            }
+            $page_title = '- ' . $view_phrase['phrase'];
+            $page_og_title = $view_phrase['phrase'];
+            $page_image = '/images/' . $view_phrase['date'] . '.jpg';
+            break;
+        case 'sent_link':
+            $page_title = '- Verification link sent';
+            break;
+        case 'verification_completed':
+            $page_title = '- Email verified';
+            break;
+        case 'unsubscribed':
+            $page_title = '- Unsubscribed';
+            break;
+        case 'error':
+            $page_title = '- Error';
+            break;
+        default:
+            $page_title = 'via E-mail | Practice your languages!';
+            echo '<script src="https://www.google.com/recaptcha/api.js"></script>';
+    }
+    ?>
+    <title>Daily Phrase <?php echo $page_title; ?></title>
+    <meta property="og:title" content="<?php echo $page_og_title; ?>">
     <meta property="og:description"
           content="Subscribe to receive daily phrases in various languages to boost your language skills. Simple, free, and effective learning experience.">
-    <meta property="og:image" content="https://dailyphrase.email/languages-daily-phrase.jpg">
-    <meta property="og:url" content="https://dailyphrase.email">
+    <meta property="og:image" content="<?php echo $page_og_image; ?>">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Daily Phrase">
-    <link rel="icon" href="https://dailyphrase.email/icon.png" type="image/png">
-    <meta name="theme-color" content="#ffffff">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #f8f9fa, #e9ecef);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        main {
-            background: #ffffff;
-            padding: 3rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin-top: 0;
-            color: #333;
-        }
-
-        p {
-            font-size: 1rem;
-            color: #666;
-            line-height: 1.5;
-        }
-
-        form {
-            margin-top: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
-
-        input[type="email"] {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        input[type="checkbox"] {
-            margin-right: 0.5rem;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        button {
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        button:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(38, 143, 255, 0.5);
-        }
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            padding: 1rem;
-            font-size: 12px;
-        }
-
-        footer a {
-            color: #777;
-            text-decoration: none;
-        }
-    </style>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <link rel="icon" href="/assets/icon.png" type="image/png">
+    <link rel="stylesheet" href="/assets/suppastyle.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XP2B88NNS7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XP2B88NNS7');
+    </script>
 </head>
 <body>
 <main>
     <?php
     switch ($view) {
+        case 'view_phrase':
+            include 'parts/view_phrase.php';
+            break;
         case 'sent_link':
-            echo '<h1>Verification link sent</h1>
-        <p>Go to your email and find the verification link. It may be in the spam folder, who knows?</p>';
+            include 'parts/sent_link.php';
             break;
         case 'verification_completed':
-            echo '<h1>Email verified</h1>
-        <p>Your email has been added to the list and you will receive your daily dose of language practice.</p>
-        <p>
-        <a href="https://wa.me/?text=Look%20at%20this%20cool%20service%20that%20sends%20you%20a%20phrase%20in%20different%20languages%20every%20day!%0A%0Ahttps%3A%2F%2Fdailyphrase.email" target="_blank" rel="noopener noreferrer">
-            <img src="/whatsapp-share-button-icon.webp" alt="Share on WhatsApp">
-        </a>
-        </p>';
+            include 'parts/verification_complete.php';
             break;
         case 'unsubscribed':
-            echo '<h1>Unsubscribed</h1>
-        <p>Your email has been removed from the list. You will no longer receive daily phrases.</p>';
+            include 'parts/unsubscribed.php';
             break;
         case 'error':
-            echo '<h1>Error</h1>
-        <p>There was an error processing your request. Please <a href="/">try again</a>.</p>';
+            include 'parts/error.php';
             break;
         default:
-            ?>
-            <h1>Receive a daily phrase in multiple languages</h1>
-            <p>It will take you 30 seconds each day to read the phrases and it will help you get new vocabulary as well
-                as
-                stay in touch with the languages you love. Simple, free.</p>
-            <p>Write your email below, pick your languages, and start receiving your daily dose of language practice for
-                free:</p>
-            <form method="post" action="">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <br>
-                <label><input type="checkbox" name="spanish"> Spanish</label>
-                <label><input type="checkbox" name="german"> German</label>
-                <label><input type="checkbox" name="italian"> Italian</label>
-                <label><input type="checkbox" name="french"> French</label>
-                <label><input type="checkbox" name="portuguese"> Portuguese</label>
-                <label><input type="checkbox" name="norwegian"> Norwegian</label>
-                <br>
-                <div class="g-recaptcha" data-sitekey="<?php echo $_ENV['RECAPTCHA_SITE_KEY']; ?>"></div>
-                <br>
-                <button type="submit">Subscribe</button>
-            </form>
-        <?php
+            include 'parts/welcome.php';
     }
     ?>
 </main>
-<footer>
-    dailyphrase.email - <a href="/privacy.txt">Privacy Policy</a>
-</footer>
+<aside>
+    <?php
+    // Pick 5 random phrases
+    if ($view === 'view_phrase') {
+        $stmt = $pdo->prepare("SELECT * FROM phrases WHERE imaged=1 and date<CURDATE() and date!=:date ORDER BY RAND() LIMIT 4");
+        $stmt->bindParam(':date', $_GET['phrase']);
+    } else {
+        $stmt = $pdo->prepare("SELECT * FROM phrases WHERE imaged=1 and date<CURDATE() ORDER BY RAND() LIMIT 4");
+    }
+    $stmt->execute();
+    $phrases = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Randomize the position and size of the phrases
+    $randomization_power = [
+        [
+            'top:' . rand(3, 6) . '%',
+            'right:' . rand(3, 7) . '%',
+            'width:' . rand(210, 280) . 'px'
+        ],
+        [
+            'bottom:' . rand(3, 8) . '%',
+            'right:' . rand(3, 7) . '%',
+            'width:' . rand(205, 260) . 'px'
+        ],
+        [
+            'bottom:' . rand(3, 6) . '%',
+            'left:' . rand(3, 7) . '%',
+            'width:' . rand(210, 285) . 'px'
+        ],
+        [
+            'top:' . rand(3, 8) . '%',
+            'left:' . rand(3, 7) . '%',
+            'width:' . rand(206, 275) . 'px'
+        ]
+    ];
+
+    // Display the phrases
+    $i = 0;
+    foreach ($phrases as $phrase) {
+        $languages = ['phrase', 'spanish', 'german', 'italian', 'french', 'portuguese', 'norwegian'];
+        echo '
+        <div class="example-phrase" style="' . implode(';', $randomization_power[$i]) . '">
+            <a href="/' . $phrase['date'] . '"><figure>
+                <img src="/images/' . $phrase['date'] . '.jpg" alt="Day ' . $phrase['phrase'] . '">
+                <figcaption><span>' . $phrase[$languages[array_rand($languages)]] . '</span></figcaption>
+            </figure></a>
+        </div>';
+        $i++;
+    }
+    ?>
+</aside>
 </body>
 </html>
