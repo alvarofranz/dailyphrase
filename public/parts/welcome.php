@@ -8,7 +8,7 @@
     <form method="post" action="/" class="flex-me-down">
         <label><input type="email" id="email" name="email" placeholder="your-email@example.com" required></label>
         <div class="languages-picker">
-            <label><input type="checkbox" name="spanish"> Spanish</label>
+            <label><input type="checkbox" name="spanish" checked> Spanish</label>
             <label><input type="checkbox" name="german"> German</label>
             <label><input type="checkbox" name="italian"> Italian</label>
             <label><input type="checkbox" name="french"> French</label>
