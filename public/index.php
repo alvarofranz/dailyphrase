@@ -82,11 +82,12 @@ if ($view === 'default_view' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($
 
         $welcome_email = '<h1>Welcome to Daily Phrase!</h1>
         <p>You will receive a daily phrase in the languages you selected.</p>
-        <p>Please click the link below to verify your email address and start receiving your daily phrases:</p>
-        <p><a href="' . $verification_link . '">' . $verification_link . '</a></p><hr><p>dailyphrase.email - Thanks!</p>';
+        <p>Please confirm your email clicking the link below, in order to start receiving your daily phrases:</p>
+        <p><a href="' . $verification_link . '" style="color:#1b74e4;text-decoration:none;display:block"><span style="font-family:Helvetica Neue,Helvetica,Lucida Grande,tahoma,verdana,arial,sans-serif;white-space:nowrap;font-weight:bold;vertical-align:middle;color:white;font-family:Arial-BoldMT,sans-serif;white-space:nowrap;font-size:12px;line-height:14px">Confirm&nbsp;now</span></a></p><p>You will enjoy the daily phrases :)</p><hr>
+        <p style="margin-top:30px;font-size:11px;color:#555;">30 N Gould St Ste N, Sheridan, WY 82801</p>';
 
         // Send verification email (Use your own mail function or mail library)
-        send_email($email, "Verify your email", $welcome_email);
+        send_email($email, "Verify your email to start receiving your Daily Phrase", $welcome_email);
 
         $view = 'sent_link';
     } else {
